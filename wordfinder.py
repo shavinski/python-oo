@@ -4,40 +4,28 @@ class WordFinder:
     """Word Finder: finds random words from a dictionary."""
     def __init__(self, file_destination):
         """Creates instance with a assigned file destination"""
-        self.file_destination = file_destination
-        self.words = list(open(self.file_destination))
+        self.file_destination = open(file_destination)
+        self.words = self.words_strip()
         self.print_words_read()
-        #print(f"{len(self.words)} words read")
-        
+
     def __repr__(self):
-        return f"<Words read from {self.file_destination}"
+        return f"<Words read from {self.file_destination}>"
+
+    def words_strip(self):
+        "Removes white space from file"
+        return [line.strip() for line in self.file_destination]
 
     def print_words_read(self):
-        """On first instantiation it will print num of words in file"""
+        """On instantiation it will print num of words in file"""
         print(f"{len(self.words)} words read")
 
     def random(self):
         """Prints random word from file_destination"""
-    
-        #words = list(open(self.file_destination))
-        words_sliced = []
-
-        for word in self.words:
-            if word.endswith('\n'):
-                words_sliced.append(word[:-1:])
-            else:
-                words_sliced.append(word)
-    
-        return random.choice(words_sliced)
-    
-word = WordFinder('random.txt')
-word.random()
-    
+        return random.choice(self.words)
 
 
-
-
-
-
-
-    
+class SpecialWordFinder(WordFinder):
+    """Adds extra conditions to WordFinder.words_strip"""
+    def words_strip(self):
+        return [word for word in super().words_strip() if word != "" and not
+                word.startswith("#")]
